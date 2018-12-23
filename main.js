@@ -36,6 +36,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             case 'lancha':
                 var usersOn = getAllUsersOn();
                 console.log(usersOn);
+                
                 bot.sendMessage({
                     to: channelID,
                     message: 'Pong!'
@@ -45,6 +46,10 @@ bot.on('message', function (user, userID, channelID, message, evt) {
          }
      }
 });
+
+function makeUsersOnJSON(){
+
+}
 
 function getAllUsersOn(){
     var voiceChannels = getVoiceChannels();
@@ -59,11 +64,19 @@ function getAllUsersOn(){
 function getUsersOn(channel){
     var chan = bot.channels[channel];
     var members = chan.members;
-    var temp = [];
+    var temp = {};
+    
     for (member in members) {
-            temp.push(member);
+            user = {};
+            user["user_id"] = member;
+            user["nick"] = bot.servers[chan.guild_id].members[member]["nick"];
+            user["username"] = bot.users[member]["username"];
+            user["discriminator"] = bot.users[member]["discriminator"];
+            user["mute"] = members[member]["mute"] || members[member]["self_mute"];
+            user["deaf"] = members[member]["deaf"] || members[member]["self_deaf"];
+            user["game"] = bot.users[member]["game"];
+            temp[member] = user;
         }
-    console.log(temp)
     return temp;
 }
 
