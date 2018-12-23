@@ -1,0 +1,10 @@
+{
+  "name": "whosOnBot",
+  "version": "1.0.0",
+  "description": "A bot to list who be in voice channels",
+  "main": "main.js",
+  "author": "Eduardo Dias Defreyn",
+  "dependencies": {
+    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6"
+  }
+}
