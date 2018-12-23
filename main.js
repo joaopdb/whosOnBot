@@ -35,11 +35,25 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             case 'on':
             case 'lancha':
                 var usersOn = getAllUsersOn();
+                msg = "";
                 console.log(usersOn);
-                
+                if(isEmpty(usersOn)){
+                    msg = "Não há pessoas nos canais de voz"
+                }else {
+                    for (channel in usersOn){
+                        msg += "Canal " + bot.channels[channel]["name"] + "\n";
+                        for (member in usersOn[channel]){
+                            name = usersOn[channel][member]["username"];
+                            if( usersOn[channel][member]["nick"] != null ) name = usersOn[channel][member]["nick"]; 
+                            msg += "\t" + name + " ( "+usersOn[channel][member]["username"]+"#"+usersOn[channel][member]["discriminator"]+" )\n";
+                            console.log();
+                        }
+                        msg += "\n";
+                    }
+                }
                 bot.sendMessage({
                     to: channelID,
-                    message: 'Pong!'
+                    message: msg
                 });
             break;
             // Just add any case commands if you want to..
@@ -56,7 +70,9 @@ function getAllUsersOn(){
     var usersOn = {};
     for (channelKey in voiceChannels) {
         var member = getUsersOn(voiceChannels[channelKey]);
-        usersOn[voiceChannels[channelKey]] = (member);
+        if(!isEmpty(member)){        
+            usersOn[voiceChannels[channelKey]] = member;
+        }
     }
     return usersOn;
 }
@@ -89,4 +105,9 @@ function getVoiceChannels(){
     }
 
     return voiceChannels;
+}
+60
+
+function isEmpty(obj) {
+  return Object.keys(obj).length === 0;
 }
